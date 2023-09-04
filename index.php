@@ -1,14 +1,10 @@
 <?php
 
-require_once('./connection');
-
-try {
-     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
+require_once('./connection.php');
 
 $stmt = $pdo->query('SELECT * FROM books');
+
+$stmt = $pdo->query('SELECT * FROM books WHERE is_deleted<>1');
 
 echo "<ul>";
 while ($row = $stmt->fetch())
@@ -27,3 +23,4 @@ while ($row = $stmt->fetch())
 
 
 echo "</ul>";
+?>

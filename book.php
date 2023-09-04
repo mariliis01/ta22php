@@ -2,29 +2,14 @@
 
 require_once('./connection.php');
 
-$host = '127.0.0.1';
-$db   = 'books';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-try {
-     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
-
 $id = $_GET['id'];
 
 $stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id');
 $stmt->execute(['id'=> $id]);
 $book = $stmt->fetch();
+
+$stmt = $pdo->prepare('SELECT * FROM book_authors ba LEFT JOIN authors a ON a.id=ba.author_id WHERE book_id=:book_id;');
+$stmt->execute(['book_id'=> $id]);
 
 ?>
 
@@ -37,8 +22,21 @@ $book = $stmt->fetch();
 </head>
 <body>
     <h1><?=$book['title']?></h1>
+    <?php
+    while ($author = $stmt->fetch()) {
+?>
+    <li><?= $author['first_name']; ?><?= $author['last_name']; ?> </li>
+<?php
+    }
+?>
+    </ul>
     <img src="<?=$book['cover_path']?>">
     <p>Hind: <?= round($book['price'], 2); ?> €</p>
+
+     <form action="delete.php" method="post" id="delete">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <button form="delete">Kustuta</button>
+    </form>
 
 </body>
 </html>

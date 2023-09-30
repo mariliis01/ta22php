@@ -46,6 +46,11 @@ $stmt->execute(['book_id' => $id]);
         <button form="delete">Kustuta</button>
     </form>
 
+    <form action="restore.php" method="post" id="restore">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <button form="restore">Taasta</button>
+    </form>
+
     <a href="./editbooks.php?id=<?= $book['id']; ?>"><button>Muuda andmeid</button></a>
 
 </body>

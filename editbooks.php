@@ -2,14 +2,15 @@
 
 require_once('./connection.php');
 
-$id = $_GET['id'];
+$id = $_GET['id'] ?? $_POST['id'];
 
+//Fetch the book details
 $stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
 
-$stmt = $pdo->prepare('SELECT * FROM book_authors ba LEFT JOIN authors a ON a.id=ba.author_id WHERE book_id=:book_id;');
-$stmt->execute(['book_id' => $id]);
+//$stmt = $pdo->prepare('SELECT * FROM book_authors ba LEFT JOIN authors a ON a.id=ba.author_id WHERE book_id=:book_id;');
+//$stmt->execute(['book_id' => $id]);
 
 ?>
 
@@ -19,23 +20,94 @@ $stmt->execute(['book_id' => $id]);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $book['title'] ?></title>
+    <title>Edit Book</title>
 </head>
 
 <body>
-    <h1>Raamatu info muutmine</h1>
-
-    <form id="edit" action="edit.php">
-        <p>Pealkiri</p>
-        <input type="text" value="<?= $book['title'] ?>">
-        <p>Hind</p>
-        <input type="number" value="<?= round($book['price'], 2) ?>">
-        <p>Lehekülgede arv</p>
-        <input type="numer" value="<?= $book['pages'] ?>">
-        <p>Laoseis</p>
-        <input type="number" value="<?= $book['stock_saldo'] ?>">
+    <h1>Raamatu info muutmine: <?= $book['title'] ?> </h1>
+    Title:
+    <form action="update_field.php" method="post">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="field" value="title">
+        <input type="text" name="value" value="<?= $book['title']; ?>">
+        <input type="submit" value="Update">
     </form>
-    <button form="edit">Salvesta muudatused</button>
+
+    Release Date:
+    <form action="update_field.php" method="post">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="field" value="release_date">
+        <input type="text" pattern="\d{4}" title="Enter a valid year" name="value" value="<?= $book['release_date']; ?>">
+        <input type="submit" value="Update">
+    </form>
+
+    Language
+    <form action="update_field.php" method="post">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="field" value="language">
+        <input type="text" name="value" value="<?= $book['language']; ?>">
+        <input type="submit" value="Update">
+    </form>
+
+    Pages
+    <form action="update_field.php" method="post">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="field" value="pages">
+        <input type="number" pattern=\d name="value" value="<?= $book['pages']; ?>">
+        <input type="submit" value="Update">
+    </form>
+
+    Type
+    <form action="update_field.php" method="post">
+        <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="field" value="type">
+        <input type="text" name="value" value="<?= $book['type']; ?>">
+        <input type="submit" value="Update">
+    </form>
+
+    <h2>Current Authors: </h2>
+    <ul>
+        <?php
+        $authorsStmt = $pdo->prepare('SELECT * FROM book_authors ba LEFT JOIN authors a ON a.id=ba.author_id WHERE book_id=:book_id');
+        $authorsStmt->execute(['book_id' => $id]);
+        while ($author = $authorsStmt->fetch()) {
+        ?>
+
+            <li>
+                <?= $author['first_name']; ?> <?= $author['last_name']; ?>
+                <form action="remove_author.php" method="post" style="display: inline;">
+                    <input type="hidden" name="book_id" value="<? $id; ?>">
+                    <input type="hidden" name="author_id" value="<? $author['id']; ?>">
+                    <input type="submit" value="Remove">
+                </form>
+            </li>
+
+        <?php
+        }
+        ?>
+    </ul>
+
+    <h2>Add Author: </h2>
+    <form action="add_author.php" method="post">
+        <input type="hidden" name="book_id" value="<? $id; ?>">
+        <select name="author_id">
+            <?php
+            $allAuthorsStmt = $pdo->query('SELECT * FROM authors');
+            while ($author = $allAuthorsStmt->fetch()) {
+            ?>
+                <option value="<? $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
+            <?php
+            }
+            ?>
+        </select>
+        <input type="submit" value="Add">
+    </form>
+    <form action="book.php" method="get">
+        <input type="hidden" name="id" value="<? $id; ?>">
+        <input type="submit" value="Return to Book">
+    </form>
+
+
 </body>
 
 </html>

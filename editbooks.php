@@ -31,7 +31,7 @@ $book = $stmt->fetch();
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="title">
         <input type="text" name="value" value="<?= $book['title']; ?>">
-        <input type="submit" value="Update">
+        <input type="submit" value="Uuenda">
     </form>
 
     Ilmumisaasta:
@@ -39,7 +39,7 @@ $book = $stmt->fetch();
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="release_date">
         <input type="text" pattern="\d{4}" title="Enter a valid year" name="value" value="<?= $book['release_date']; ?>">
-        <input type="submit" value="Update">
+        <input type="submit" value="Uuenda">
     </form>
 
     Keel:
@@ -47,7 +47,7 @@ $book = $stmt->fetch();
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="language">
         <input type="text" name="value" value="<?= $book['language']; ?>">
-        <input type="submit" value="Update">
+        <input type="submit" value="Uuenda">
     </form>
 
     Pages:
@@ -55,7 +55,7 @@ $book = $stmt->fetch();
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="pages">
         <input type="number" name="value" value="<?= $book['pages']; ?>">
-        <input type="submit" value="Update">
+        <input type="submit" value="Uuenda">
     </form>
     <h2>Current Authors: </h2>
     <ul>
@@ -70,7 +70,7 @@ $book = $stmt->fetch();
                 <form action="remove_author.php" method="post" style="display: inline;">
                     <input type="hidden" name="book_id" value="<?= $id; ?>">
                     <input type="hidden" name="author_id" value="<?= $author['id']; ?>">
-                    <input type="submit" value="Remove">
+                    <input type="submit" value="Eemalda">
                 </form>
             </li>
 
@@ -96,7 +96,7 @@ $book = $stmt->fetch();
     </form>
     <form action="book.php" method="get">
         <input type="hidden" name="id" value="<?= $id; ?>">
-        <input type="submit" value="Return to Book">
+        <input type="submit" value="Tagasi raamatu juurde">
     </form>
 
 

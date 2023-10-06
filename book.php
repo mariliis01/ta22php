@@ -23,6 +23,8 @@ $stmt->execute(['book_id' => $id]);
 </head>
 
 <body>
+
+
     <h1><?= $book['title'] ?></h1>
     <?php
     while ($author = $stmt->fetch()) {
@@ -46,12 +48,7 @@ $stmt->execute(['book_id' => $id]);
         <button form="delete">Kustuta</button>
     </form>
 
-    <form action="restore.php" method="post" id="restore">
-        <input type="hidden" name="id" value="<?= $id; ?>">
-        <button form="restore">Taasta</button>
-    </form>
-
-    <a href="./editbooks.php?id=<?= $book['id']; ?>">Muuda andmeid</a>
+    <a href="./editbooks.php?id=<?= $book['id']; ?>"><button>Muuda andmeid</button></a>
 
 </body>
 

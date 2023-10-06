@@ -51,7 +51,7 @@ $stmt->execute(['book_id' => $id]);
         <button form="restore">Taasta</button>
     </form>
 
-    <a href="./editbooks.php?id=<?= $book['id']; ?>"><button>Muuda andmeid</button></a>
+    <a href="./editbooks.php?id=<?= $book['id']; ?>">Muuda andmeid</a>
 
 </body>
 

@@ -9,3 +9,4 @@ $stmt = $pdo->prepare('INSERT INTO book_authors (book_id, author_id) VALUES (:bo
 $stmt->execute(['book_id' => $book_id, 'author_id' => $author_id]);
 
 header('Location: editbooks.php?id=' . $book_id);
+?>

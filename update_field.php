@@ -9,7 +9,7 @@ if($_POST) {
 
     $stmt = $pdo->prepare("UPDATE books SET $field = :value WHERE id = :id");
     $stmt->execute([
-        'id' => $id, 
+        'id' => $id,
         'value' => $value
     ]);
 

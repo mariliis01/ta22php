@@ -24,8 +24,9 @@ $book = $stmt->fetch();
 </head>
 
 <body>
-    <h1>Raamatu info muutmine: <?= $book['title'] ?> </h1>
-    Title:
+    <h1>Muuda raamatut: <?= $book['title']; ?> </h1>
+
+    Pealkiri:
     <form action="update_field.php" method="post">
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="title">
@@ -33,7 +34,7 @@ $book = $stmt->fetch();
         <input type="submit" value="Update">
     </form>
 
-    Release Date:
+    Ilmumisaasta:
     <form action="update_field.php" method="post">
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="release_date">
@@ -41,7 +42,7 @@ $book = $stmt->fetch();
         <input type="submit" value="Update">
     </form>
 
-    Language
+    Keel:
     <form action="update_field.php" method="post">
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="language">
@@ -49,22 +50,13 @@ $book = $stmt->fetch();
         <input type="submit" value="Update">
     </form>
 
-    Pages
+    Pages:
     <form action="update_field.php" method="post">
         <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="hidden" name="field" value="pages">
-        <input type="number" pattern=\d name="value" value="<?= $book['pages']; ?>">
+        <input type="number" name="value" value="<?= $book['pages']; ?>">
         <input type="submit" value="Update">
     </form>
-
-    Type
-    <form action="update_field.php" method="post">
-        <input type="hidden" name="id" value="<?= $id; ?>">
-        <input type="hidden" name="field" value="type">
-        <input type="text" name="value" value="<?= $book['type']; ?>">
-        <input type="submit" value="Update">
-    </form>
-
     <h2>Current Authors: </h2>
     <ul>
         <?php
@@ -76,8 +68,8 @@ $book = $stmt->fetch();
             <li>
                 <?= $author['first_name']; ?> <?= $author['last_name']; ?>
                 <form action="remove_author.php" method="post" style="display: inline;">
-                    <input type="hidden" name="book_id" value="<? $id; ?>">
-                    <input type="hidden" name="author_id" value="<? $author['id']; ?>">
+                    <input type="hidden" name="book_id" value="<?= $id; ?>">
+                    <input type="hidden" name="author_id" value="<?= $author['id']; ?>">
                     <input type="submit" value="Remove">
                 </form>
             </li>
@@ -89,13 +81,13 @@ $book = $stmt->fetch();
 
     <h2>Add Author: </h2>
     <form action="add_author.php" method="post">
-        <input type="hidden" name="book_id" value="<? $id; ?>">
+        <input type="hidden" name="book_id" value="<?= $id; ?>">
         <select name="author_id">
             <?php
             $allAuthorsStmt = $pdo->query('SELECT * FROM authors');
             while ($author = $allAuthorsStmt->fetch()) {
             ?>
-                <option value="<? $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
+                <option value="<?= $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
             <?php
             }
             ?>
@@ -103,7 +95,7 @@ $book = $stmt->fetch();
         <input type="submit" value="Add">
     </form>
     <form action="book.php" method="get">
-        <input type="hidden" name="id" value="<? $id; ?>">
+        <input type="hidden" name="id" value="<?= $id; ?>">
         <input type="submit" value="Return to Book">
     </form>
 

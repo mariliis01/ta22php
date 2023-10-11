@@ -2,11 +2,6 @@
 
 require_once('./connection.php');
 
-//$stmt = $pdo->query('SELECT * FROM books');
-
-$stmt = $pdo->query('SELECT * FROM books WHERE is_deleted <>1');
-
-//$stmt = $pdo->query('SELECT * FROM book_authors ba LEFT JOIN authors a ON a.id=ba.author_id WHERE book_id= :id');
 
 ?>
 
@@ -26,12 +21,10 @@ $stmt = $pdo->query('SELECT * FROM books WHERE is_deleted <>1');
 
     $searchTerm = $_GET['search'] ?? '';
 
-    if ($searchTerm) {
-        $stmt = $pdo->prepare('SELECT * FROM books WHERE is_deleted <> 1 AND title LIKE :searchTerm');
-        $stmt->execute(['searchTerm' => '%' . $searchTerm . '%']);
-    } else {
-        $stmt = $pdo->query('SELECT * FROM books WHERE is_deleted <> 1');
-    }
+
+    $stmt = $pdo->prepare('SELECT * FROM books WHERE is_deleted <> 1 AND title LIKE :searchTerm');
+    $stmt->execute(['searchTerm' => '%' . $searchTerm . '%']);
+
     ?>
     <form action="index.php" method="get">
         <input type="text" name="search" placeholder="Otsi raamatut">
@@ -54,26 +47,26 @@ $stmt = $pdo->query('SELECT * FROM books WHERE is_deleted <>1');
         <input type="submit" value="Lisa autor">
     </form>
 
+
+    <ul>
+        <?php
+
+        while ($row = $stmt->fetch()) {
+        ?>
+
+
+            <li>
+                <a href="./book.php?id=<?= $row['id']; ?>">
+                    <?= $row['title']; ?>
+                </a>
+            </li>
+
+        <?php
+        }
+
+        ?>
+
+    </ul>
 </body>
 
 </html>
-
-<?php
-echo "<ul>";
-
-while ($row = $stmt->fetch()) {
-?>
-
-
-    <li>
-        <a href="./book.php?id=<?= $row['id']; ?>">
-            <?= $row['title'] . "<br>"; ?>
-        </a>
-    </li>
-
-<?php
-}
-
-
-echo "</ul>";
-?>
